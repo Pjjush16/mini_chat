@@ -1,4 +1,12 @@
+<div align="center">
 
+# 🌂 微聊系统 · 赛博起源
+
+> **[ 📖 先看故事，再读代码：点击进入赛博起源展厅 ](https://pjjush16.github.io/mini_chat/)**
+> 
+> *（这是一个独立、沉浸式的 HTML 页面，专门用来讲述这个项目的由来）*
+
+</div>
 ---
 
 # 微聊系统 (mini_chat)
@@ -96,7 +104,7 @@ define('RTC_CONFIG', json_encode([
 
 ---
 
-##🔧 工具调用示例
+## 🔧 工具调用示例
 
 AI 通过 【tool】 和 【/tool】 标记调用内置工具：
 
@@ -120,7 +128,7 @@ AI 通过 【tool】 和 【/tool】 标记调用内置工具：
 
 ---
 
-##🎨 LaTeX 图层绘图示例
+## 🎨 LaTeX 图层绘图示例
 
 支持通过 【photo】 和 【/photo】 绘制分层图形：
 
@@ -139,7 +147,7 @@ AI 通过 【tool】 和 【/tool】 标记调用内置工具：
 支持图层： level 参数（数字越小越底层）
 
 ---
-##🎵 音乐生成示例
+## 🎵 音乐生成示例
 
 通过 【audio】 标记生成音乐：
 
@@ -159,7 +167,7 @@ piano、violin、cello、harp、flute、trumpet、sax、guitar、organ、bell、
 
 ---
 
-##📜 授权哲学
+## 📜 授权哲学
 
 这把伞应该保护人，而不是变成另一场雨。
 
@@ -170,7 +178,7 @@ piano、violin、cello、harp、flute、trumpet、sax、guitar、organ、bell、
 
 ---
 
-##💬 联系
+## 💬 联系
 
 如果你愿意，可以把这个伞撑到更远的地方。
 或者只是聊聊天：
