@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>微聊系统 · 赛博起源</title>
+    <style>
+        :root {
+            --bg: #0b0b0e;
+            --card-bg: rgba(28, 28, 34, 0.65);
+            --text: #e5e5e7;
+            --text-secondary: #8e8e93;
+            --accent: #07c160;
+            --border: rgba(255, 255, 255, 0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            background-image: radial-gradient(circle at 80% 10%, rgba(7, 193, 96, 0.02) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 720px;
+            width: 100%;
+            margin: 20px auto;
+        }
+
+        /* 毛玻璃卡片 */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #ffffff, #9a9a9a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            border-left: 3px solid var(--accent);
+            padding-left: 12px;
+        }
+
+        .quote-box {
+            background: rgba(7, 193, 96, 0.08);
+            border-left: 4px solid var(--accent);
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 24px 0;
+            font-style: italic;
+            color: #c5c5c5;
+        }
+
+        .quote-box strong {
+            color: #ffffff;
+            font-style: normal;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 500;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            color: #fff;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px 0;
+        }
+
+        ul li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        ul li:last-child {
+            border-bottom: none;
+        }
+
+        ul li::before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(7, 193, 96, 0.15);
+            color: var(--accent);
+            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+            margin-right: 6px;
+        }
+
+        .code-block {
+            background: #151518;
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #d4d4d4;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .code-block .comment { color: #6a9955; }
+        .code-block .keyword { color: #569cd6; }
+        .code-block .string { color: #ce9178; }
+
+        /* 图片占位区 */
+        .media-box {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 24px 0;
+            background: #151518;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .media-box img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* 底部声明与邮箱 */
+        .footer {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 12px;
+        }
+
+        .footer .email {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-block;
+            margin: 8px 0 12px;
+        }
+
+        .footer .email:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 24px 18px; }
+            h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- ===== 卡片 1：开场白 ===== -->
+    <div class="card">
+        <h1>微聊系统 · 整页叙事</h1>
+        <div class="subtitle">挨过雨的人，总想给别人打一把伞。</div>
+
+        <div class="quote-box">
+            <strong>“不希望每个人都被雨淋过，但希望他们能早点找到归宿。”</strong><br>
+            2026年6月21日，我因为一句“普通人访问全球互联网能干什么”，被千问封禁了账号。系统回复：“抱歉，您的账号存在异常风险，目前已停止使用。”
+        </div>
+
+        <p>我没有申诉，也没有回头。我卸载了它，然后花了一些时间，把曾经想用的功能，全部写进了这个开源项目里。</p>
+
+        <p style="color: #aaa; font-size: 14px;">
+            <span class="tag">开源</span>
+            <span class="tag">AGPLv3 / MIT</span>
+            <span class="tag">自由</span>
+            <span class="tag">不审查</span>
+        </p>
+    </div>
+
+    <!-- ===== 卡片 2：核心特性 ===== -->
+    <div class="card">
+        <h2>✨ 核心特性</h2>
+
+        <h3>🧠 AI 智能体</h3>
+        <ul>
+            <li>工具调用 (时间/计算/联网搜索/用户信息)</li>
+            <li>LaTeX 图层绘图 (支持 <code>!level</code> 分层)</li>
+            <li>OCR 图像识别 (云端 API + 本地 Tesseract 双保险)</li>
+            <li>系统级语音输入 &amp; 流式音频合成</li>
+        </ul>
+
+        <h3>💬 即时通讯</h3>
+        <ul>
+            <li>好友系统、群聊系统 (支持频道模式与匿名发言)</li>
+            <li>WebRTC 点对点加密通信</li>
+            <li>消息高亮、消息撤回 (内置扩容卡机制)</li>
+            <li>拼手气红包、礼物赠送、转账系统</li>
+        </ul>
+
+        <h3>🪙 经济与奖励</h3>
+        <ul>
+            <li>微聊币钱包：每日签到、交易记录</li>
+            <li>消费商店：改名卡、撤回扩容卡、幸运抽奖</li>
+            <li>快应用打赏与内购 (平台抽成 10%，90% 归开发者)</li>
+            <li>成就系统与经验等级</li>
+        </ul>
+
+        <h3>⚡ 快应用生态</h3>
+        <ul>
+            <li>用户可上传 HTML 快应用 (类似小程序)</li>
+            <li>内置内购 API 与打赏面板</li>
+            <li>播放量统计与开发者收益看板</li>
+        </ul>
+    </div>
+
+    <!-- ===== 卡片 3：赛博起源（你的脸书截图） ===== -->
+    <div class="card">
+        <h2>📸 赛博起源</h2>
+        
+        <div class="media-box">
+            <!-- ★ 你存放在 GitHub 上的封号证据 ★ -->
+            <img src="https://raw.githubusercontent.com/Pjjush16/mini_chat/e2dfdcc39c209059121484e9c40d48001172efd2/Screenshot_20260621_231633.jpg" 
+                 alt="2026年6月21日，发布在Facebook上的封号记录" 
+                 id="screenshot">
+        </div>
+
+        <p style="font-size: 14px; color: var(--text-secondary); text-align: center; margin-top: 8px;">
+            这就是那扇把我关在门外的门。
+        </p>
+    </div>
+
+    <!-- ===== 卡片 4：快速体验 ===== -->
+    <div class="card">
+        <h2>🎬 快速体验</h2>
+        <p>环境要求：PHP 7.4+ / MySQL 5.7+ / PDO 扩展。</p>
+        <div class="code-block">
+            <span class="comment">// 1. 下载源码</span>
+            git clone https://github.com/Pjjush16/mini_chat.git
+
+            <span class="comment">// 2. 在根目录创建 config.php</span>
+            define('DB_HOST', 'localhost');
+            define('DB_NAME', 'weiliao_db');
+            define('DB_USER', 'root');
+            define('DB_PASS', 'password');
+        </div>
+    </div>
+
+    <!-- ===== 卡片 5：工具示例 ===== -->
+    <div class="card">
+        <h2>🔧 工具调用示例</h2>
+        <div class="code-block">
+            <span class="comment">// 获取当前时间</span>
+            【tool】{"tool":"get_current_time"}【/tool】
+            <br><br>
+            <span class="comment">// 计算数学公式</span>
+            【tool】{"tool":"calculate","expression":"1024 * 768"}【/tool】
+            <br><br>
+            <span class="comment">// 联网搜索</span>
+            【tool】{"tool":"search_web","query":"今天上海天气"}【/tool】
+        </div>
+
+        <h2>🎨 LaTeX 分层绘图</h2>
+        <div class="code-block">
+            【photo】
+            !rect 0 6 10 4 <span class="string">blue</span> level0
+            !rect 0 0 10 6 <span class="string">green</span> level0
+            !sun 8 8 1.5 <span class="string">yellow</span> level1
+            !text 5 9 <span class="string">\large</span> <span class="string">white</span> Hello level2
+            【/photo】
+        </div>
+    </div>
+
+    <!-- ===== 卡片 6：授权与结尾 ===== -->
+    <div class="card" style="text-align: center;">
+        <h2>📜 授权哲学</h2>
+        <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">
+            这把伞应该保护人，而不是变成另一场雨。
+        </p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; text-align: left; margin-bottom: 20px;">
+            <div style="flex: 1; min-width: 220px; background: rgba(255, 255, 255, 0.04); padding: 16px; border-radius: 12px; border-left: 3px solid #e74c3c;">
+                <div style="font-weight: 600; color: #fff; margin-bottom: 6px;">🔒 核心：AGPLv3</div>
+                <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+                    公共网络服务必须完整开源修改，继续沿用 AGPLv3。
+                </div>
+            </div>
+            <div style="flex: 1; min-width: 220px; background: rgba(7, 193, 96, 0.08); padding: 16px; border-radius: 12px; border-left: 3px solid #07c160;">
+                <div style="font-weight: 600; color: #fff; margin-bottom: 6px;">🍃 个人：MIT 豁免</div>
+                <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+                    个人自用、非盈利、非公开环境，按 MIT 许可使用。
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            这里没有任何封号原则。不管你传递什么，都是自由的。<br><br>
+            
+            如果你愿意，可以把这个伞撑到更远的地方。<br>
+            或者只是聊聊天：
+            <a href="mailto:yaoqingxuan20221@outlook.com" class="email">yaoqingxuan20221@outlook.com</a>
+            <br><br>
+            <span>⚙️</span> 由 <strong>一个多情又无情的人</strong> 撰写。
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // 滚到哪，哪就淡入
+    document.addEventListener("DOMContentLoaded", function() {
+        const cards = document.querySelectorAll('.card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        cards.forEach(card => observer.observe(card));
+    });
+</script>
+
+</body>
+</html>
